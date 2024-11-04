@@ -1,0 +1,2 @@
+#exchange_rates:
+ #   currencies: ['USD', 'EUR', 'CZK', 'IDR', 'BRL']

@@ -2,7 +2,8 @@
   "name": "telemedi/test-purposes",
   "autoload": {
     "psr-4": {
-      "App\\": "src/App/"
+      "App\\": "src/App/",
+      "ExchangeRates\\": "src/ExchangeRates/"
     },
     "classmap": [
       "src/Kernel.php"

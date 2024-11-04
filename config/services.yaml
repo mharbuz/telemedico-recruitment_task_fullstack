@@ -5,6 +5,10 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
 
+imports:
+    - { resource: configs.yaml }
+    - { resource: ../src/ExchangeRates/Resources/config/services.yaml }
+
 services:
     # default configuration for services in *this* file
     _defaults:
