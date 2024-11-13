@@ -14,14 +14,17 @@ class ExchangeRatesService
     const BASE_CURRENCY = 'PLN';
     protected $params;
     protected $ratesRepository;
+    protected $currencySpreadService;
 
     public function __construct(
         ContainerBagInterface $params,
-        RatesRepository $ratesRepository
+        RatesRepository $ratesRepository,
+        CurrencySpreadService $currencySpreadService
     )
     {
         $this->params = $params;
         $this->ratesRepository = $ratesRepository;
+        $this->currencySpreadService = $currencySpreadService;
     }
 
     public function getAllCurrencyRates(\DateTimeImmutable $date): array
@@ -34,6 +37,10 @@ class ExchangeRatesService
         $rates = $this->restrictCurrencies($rates);
         
         $currencies = $this->buildCurrenciesFromRates($rates);
+
+        foreach ($currencies as $currency) {
+            $currency = ($this->currencySpreadService)($currency);
+        }
 
         return $currencies;
     }
@@ -58,8 +65,6 @@ class ExchangeRatesService
 
     protected function buildCurrenciesFromRates(array $rates): array
     {
-            echo "<pre>";
-            //print_r($rates);die;
         $currencies = [];
         foreach ($rates as $rate) {
             $currency = new Currency($rate->getCurrencyBase());

@@ -26,7 +26,7 @@ class Currency
 
     public function getSymbol(): string
     {
-        return $this->symbol;
+        return $this->symbol->getSymbol();
     }
 
     public function __toString(): string
@@ -81,6 +81,12 @@ class Currency
         }
 
         return array_pop($rate);
+    }
+
+    public function setSpreads(?float $sellPrice, ?float $buyPrice): void
+    {
+        $this->sellPrice = $sellPrice;
+        $this->buyPrice = $buyPrice;
     }
 
     public function toArray(): array

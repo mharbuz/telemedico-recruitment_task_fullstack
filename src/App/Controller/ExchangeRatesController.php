@@ -32,7 +32,7 @@ class ExchangeRatesController extends AbstractController
 
         try {
             $currencies = $this->exchangeRatesService->getAllCurrencyRates($date);
-            echo "<pre>";
+            //echo "<pre>";
             //print_r($currencies);die;
         } catch (\InvalidArgumentException $e) {
             return JsonResponse::create(['error' => $e->getMessage()], 404);

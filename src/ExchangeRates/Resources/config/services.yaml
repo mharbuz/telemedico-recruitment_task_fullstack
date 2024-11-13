@@ -8,3 +8,15 @@ services:
 
     ExchangeRates\NbpRatesRepository: ~
     ExchangeRates\RatesRepository: '@ExchangeRates\NbpRatesRepository'
+
+    ExchangeRates\CurrencyCommissionProviderEurUsd:
+        tags:
+            - { name: currency_commision_provider }
+
+    ExchangeRates\CurrencyCommissionProviderOther:
+        tags:
+            - { name: currency_commision_provider }
+
+    ExchangeRates\CurrencySpreadService:
+        arguments:
+            $providers: !tagged currency_commision_provider
