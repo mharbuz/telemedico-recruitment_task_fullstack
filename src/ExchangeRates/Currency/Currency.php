@@ -49,7 +49,7 @@ class Currency
 
     public function addRate(CurrencyRate $rate): void
     {
-        if ($rate->getCurrencyBase() !== $this->symbol) {
+        if ($rate->getCurrencyBase()->getSymbol() !== $this->symbol->getSymbol()) {
             throw new \InvalidArgumentException('Invalid rate for currency ' . $this->symbol);
         }
 
@@ -87,6 +87,16 @@ class Currency
     {
         $this->sellPrice = $sellPrice;
         $this->buyPrice = $buyPrice;
+    }
+
+    public function getSellPrice(): ?float
+    {
+        return $this->sellPrice;
+    }
+
+    public function getBuyPrice(): ?float
+    {
+        return $this->buyPrice;
     }
 
     public function toArray(): array
