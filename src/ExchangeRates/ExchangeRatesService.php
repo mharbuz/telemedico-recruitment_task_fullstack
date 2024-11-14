@@ -48,7 +48,7 @@ class ExchangeRatesService
 
     protected function getConfigCurrencies(): array
     {
-        $config = ['currencies' => ['USD', 'EUR', 'GBP', 'CHF', 'JPY']];//$this->params->get('exchange_rates');
+        $config = ['currencies' => ['USD', 'EUR', 'CZK', 'IDR', 'BRL']];//$this->params->get('exchange_rates');
 
         return $config['currencies'];
     }
