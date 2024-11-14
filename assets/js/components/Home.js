@@ -17,15 +17,15 @@ class Home extends Component {
                             <li className="nav-item">
                                 <Link className={"nav-link"} to={"/setup-check"}> React Setup Check </Link>
                             </li>
-
+                            <li className="nav-item">
+                                <Link className={"nav-link"} to={"/currency-rates"}> Currency Rates </Link>
+                            </li>
                         </ul>
                     </div>
                 </nav>
-                <div className="container p-1">
-                    <CurrencyRates />
-                </div>
                 <Switch>
                     <Route path="/setup-check" component={SetupCheck} />
+                    <Route path="/currency-rates" component={CurrencyRates} />
                 </Switch>
             </div>
         )
