@@ -1,0 +1,22 @@
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    ExchangeRates\:
+        resource: '../../'
+
+    ExchangeRates\NbpRatesRepository: ~
+    ExchangeRates\RatesRepository: '@ExchangeRates\NbpRatesRepository'
+
+    ExchangeRates\CurrencySpread\CurrencyCommissionProviderEurUsd:
+        tags:
+            - { name: currency_commision_provider }
+
+    ExchangeRates\CurrencySpread\CurrencyCommissionProviderOther:
+        tags:
+            - { name: currency_commision_provider }
+
+    ExchangeRates\CurrencySpread\CurrencySpreadService:
+        arguments:
+            $providers: !tagged currency_commision_provider

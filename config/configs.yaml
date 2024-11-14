@@ -1,0 +1,3 @@
+imports:
+    - { resource: ../src/ExchangeRates/Resources/config/config.yaml }
+    

@@ -17,3 +17,10 @@ framework:
         # Namespaced pools use the above "app" backend by default
         #pools:
             #my.dedicated.cache: null
+        pools:
+            cacheExchageRates:
+                adapter: cache.adapter.filesystem
+                public: true
+                default_lifetime: 1200 # 20 minutes  - 
+                #TODO: ask business if 20 minutes is ok with every usecase
+                #      evet when rates used for trading, from source other tan NBP

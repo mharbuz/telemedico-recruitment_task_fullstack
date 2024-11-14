@@ -1,6 +1,4 @@
-version: '3.8'
 services:
-
   webserver:
     # Aby pliki byly poprawnie synchronizowane między kontenerem a windowsem
     volumes:
@@ -9,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: recruitment-webserver
-    restart: unless-stopped
+    restart: no
     ports:
       - "80:80"
     environment:

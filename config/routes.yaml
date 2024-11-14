@@ -8,6 +8,10 @@ setupcheck:
     path: /api/setup-check
     controller: App\Controller\DefaultController::setupCheck
 
+ExchangeRates:
+    path: /api/exchange-rates
+    controller: App\Controller\ExchangeRatesController::index
+
 index:
     path: /{wildcard}
     defaults: {
@@ -15,5 +19,4 @@ index:
     }
     requirements:
         wildcard: .*
-    # controller: App\Controller\DefaultController::index
 
