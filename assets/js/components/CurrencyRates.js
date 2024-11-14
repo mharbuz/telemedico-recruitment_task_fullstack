@@ -1,6 +1,7 @@
 // src/components/CurrencyRates.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useHistory, useLocation } from 'react-router';
 
 const CurrencyRates = () => {
     const [askedRates, setAskedRates] = useState([]);
@@ -8,40 +9,51 @@ const CurrencyRates = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [askedDate, setAskedDate] = useState(null);
-
-    /**
-     * to simulate different dates, you can change the currentDate to a different date
-     * eg
-     * const [currentDate, setCurrentDate] = useState(new Date('2024-11-11'));
-     */
     const [currentDate, setCurrentDate] = useState(new Date());
+
+    const history = useHistory();
 
     useEffect(() => {
         fetchCurrentRates();
     }, []);
 
     useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const dateParam = urlParams.get('date');
+        if (dateParam) {
+            setAskedDate(new Date(dateParam));
+        }
+    }, []);
+
+    useEffect(() => {
         if (askedDate !== null) {
-        fetchAskedRates();
+            fetchAskedRates();
         }
     }, [askedDate]);
 
     const handleDateChange = (event) => {
-        setAskedDate(new Date(event.target.value));
+        const newDate = new Date(event.target.value);
+        setAskedDate(newDate);
+        history.push({
+            pathname: '/currency-rates',
+            search: '?date=' + event.target.value
+        })
     };
 
-    const fetchRates = async (date, setRates) => {
+    const fetchRates = async (date, setRates, searchForCurrent) => {
         setLoading(true);
         try {
             let rates = [];
-            let stop = 20;
+            let stop = searchForCurrent ? 20 : 1;
             let searchDate = date;
 
             while (rates.length === 0 && stop > 0) {
                 stop--;
                 let response = await fetchRatesForDate(searchDate);
                 rates = response.data.currencies;
-                searchDate.setDate(searchDate.getDate() - 1);
+                if (stop > 0) {
+                    searchDate.setDate(searchDate.getDate() - 1);
+                }
             }
 
             setRates(rates || []);
@@ -53,13 +65,13 @@ const CurrencyRates = () => {
     };
 
     const fetchCurrentRates = () => {
-        fetchRates(currentDate, setCurrentRates);
+        fetchRates(currentDate, setCurrentRates, true);
         setAskedDate(currentDate);
 
     };
 
     const fetchAskedRates = () => {
-        fetchRates(askedDate, setAskedRates);
+        fetchRates(askedDate, setAskedRates, false);
     };
 
 
@@ -84,7 +96,9 @@ const CurrencyRates = () => {
             <h1>Currency Rates</h1>
             <div className="mb-3 col-3">
                 <label htmlFor="date">Select date:</label>
-                <input className='form-control form-control-lg' type="date" value={formatDate(askedDate ?? new Date())} max={formatDate(new Date())} onChange={handleDateChange} />
+                <input className='form-control form-control-lg' type="date" value={formatDate(askedDate ?? new Date())} 
+                    max={formatDate(new Date())} min={formatDate(new Date('2023-01-01'))}
+                    onChange={handleDateChange} />
             </div>
             
             {askedRates.length === 0 ? (
@@ -95,15 +109,22 @@ const CurrencyRates = () => {
                 <table className='table table-striped'>
                     <thead>
                         <tr>
-                            <th scole="col" className="p-3">Symbol</th>
-                            <th scole="col" className="p-3">Your date rate</th>
-                            <th scole="col" className="p-3">Current rate</th>
+                            <th rowSpan="2" scole="col" className="p-3">Symbol</th>
+                            <th colSpan="3" scole="col" className="p-3">Your date rate</th>
+                            <th colSpan="3" scole="col" className="p-3">Current rate</th>
+                        </tr>
+                        <tr>
+                            <th>Sell</th>
+                            <th>Buy</th>
+                            <th>Medium</th>
+                            <th>Sell</th>
+                            <th>Buy</th>
+                            <th>Medium</th>
                         </tr>
                     </thead>
                     <tbody>
                     {askedRates.map((rate) => {
                         const currentRate = currentRates.find((currentRate) => currentRate.symbol === rate.symbol);
-                        console.log(currentRate);
                         const rateClass = currentRate && currentRate.mediumRate > rate.mediumRate ? 'text-success' : currentRate && currentRate.mediumRate < rate.mediumRate ? 'text-danger' : '';
                         const currentToAskedRate = currentRate ? (100 - (rate.mediumRate / currentRate.mediumRate) * 100 ).toPrecision(2)  : 'N/A';
                         return (
@@ -112,14 +133,30 @@ const CurrencyRates = () => {
                                     {rate.symbol} / PLN
                                 </th>
                                 <td className="p-2">
-                                    {rate.mediumRate}
+                                    {rate.sellPrice ? rate.sellPrice : '---' } 
+                                </td>
+                                <td>
+                                    {rate.buyPrice ? (rate.buyPrice) : (
+                                        <span title={`We don't buy ${rate.symbol}`}>---</span>
+                                    )}
+                                </td>
+                                <td>
+                                    {rate.mediumRate} 
+                                </td>
+                                <td className="p-2">
+                                    {currentRate?.sellPrice ? currentRate.sellPrice : '---'}
+                                </td>
+                                <td>
+                                    {currentRate?.buyPrice ? (currentRate.buyPrice) : (
+                                        <span title={`We don't buy ${rate.symbol}`}>---</span>
+                                    )}
                                 </td>
                                 <td className="p-2">
                                     <small className={rateClass}>
-                                        {currentRate ? currentRate.mediumRate : 'N/A'}&nbsp;
+                                        {currentRate ? currentRate.mediumRate : '--'}&nbsp;
                                         ({currentToAskedRate}%)
                                     </small>
-                                    </td>
+                                </td>
                             </tr>
                         );
                     })}
