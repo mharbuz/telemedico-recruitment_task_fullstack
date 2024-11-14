@@ -1,6 +1,6 @@
 <?php
 
-namespace ExchangeRates;
+namespace ExchangeRates\CurrencySpread;
 
 use ExchangeRates\Currency\Currency;
 

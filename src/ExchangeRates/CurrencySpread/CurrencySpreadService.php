@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace ExchangeRates;
+namespace ExchangeRates\CurrencySpread;
 
 
 use ExchangeRates\Currency\Currency;

@@ -6,6 +6,7 @@ namespace ExchangeRates;
 
 
 use ExchangeRates\Currency\Currency;
+use ExchangeRates\CurrencySpread\CurrencySpreadService;
 use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 

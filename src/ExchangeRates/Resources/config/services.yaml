@@ -9,14 +9,14 @@ services:
     ExchangeRates\NbpRatesRepository: ~
     ExchangeRates\RatesRepository: '@ExchangeRates\NbpRatesRepository'
 
-    ExchangeRates\CurrencyCommissionProviderEurUsd:
+    ExchangeRates\CurrencySpread\CurrencyCommissionProviderEurUsd:
         tags:
             - { name: currency_commision_provider }
 
-    ExchangeRates\CurrencyCommissionProviderOther:
+    ExchangeRates\CurrencySpread\CurrencyCommissionProviderOther:
         tags:
             - { name: currency_commision_provider }
 
-    ExchangeRates\CurrencySpreadService:
+    ExchangeRates\CurrencySpread\CurrencySpreadService:
         arguments:
             $providers: !tagged currency_commision_provider
